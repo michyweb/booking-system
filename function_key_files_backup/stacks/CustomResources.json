@@ -1,0 +1,304 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "An auto-generated nested stack.",
+  "Metadata": {},
+  "Parameters": {
+    "AppSyncApiId": {
+      "Type": "String",
+      "Description": "The id of the AppSync API associated with this project."
+    },
+    "AppSyncApiName": {
+      "Type": "String",
+      "Description": "The name of the AppSync API",
+      "Default": "AppSyncSimpleTransform"
+    },
+    "env": {
+      "Type": "String",
+      "Description": "The environment name. e.g. Dev, Test, or Production",
+      "Default": "NONE"
+    },
+    "S3DeploymentBucket": {
+      "Type": "String",
+      "Description": "The S3 bucket containing all deployment assets for the project."
+    },
+    "S3DeploymentRootKey": {
+      "Type": "String",
+      "Description": "An S3 key relative to the S3DeploymentBucket that points to the root\nof the deployment directory."
+    }
+  },
+  "Resources": {
+    "CreatePeopleLambdaDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "CreatePeople",
+        "Type": "AWS_LAMBDA",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "Cre4tePeopleLambdaDataSourceRole",
+            "Arn"
+          ]
+        },
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::Sub": [
+              "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:createPeople-${env}",
+              { "env": { "Ref": "env" } }
+            ]
+          }
+        }
+      }
+    },
+    "DeleteBookingLambdaDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "DeleteBooking",
+        "Type": "AWS_LAMBDA",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "Cre4tePeopleLambdaDataSourceRole",
+            "Arn"
+          ]
+        },
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::Sub": [
+              "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:deleteBooking-${env}",
+              { "env": { "Ref": "env" } }
+            ]
+          }
+        }
+      }
+    },
+    "CreateBookingLambdaDataSource": {
+      "Type": "AWS::AppSync::DataSource",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "Name": "CreateBooking",
+        "Type": "AWS_LAMBDA",
+        "ServiceRoleArn": {
+          "Fn::GetAtt": [
+            "Cre4tePeopleLambdaDataSourceRole",
+            "Arn"
+          ]
+        },
+        "LambdaConfig": {
+          "LambdaFunctionArn": {
+            "Fn::Sub": [
+              "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:createBooking-${env}",
+              { "env": { "Ref": "env" } }
+            ]
+          }
+        }
+      }
+    },"Cre4tePeopleLambdaDataSourceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Sub": [
+            "Cre4tePeopleLambdaDataSourceRole-${env}",
+            { "env": { "Ref": "env" } }
+          ]
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "appsync.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "InvokeLambdaFunction",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:invokeFunction"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": [
+                        "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:create*-${env}",
+                        { "env": { "Ref": "env" } }
+                      ]
+                    },
+                    {
+                      "Fn::Sub": [
+                        "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:delete*-${env}",
+                        { "env": { "Ref": "env" } }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "MutationcreatePeopleResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "CreatePeopleLambdaDataSource",
+            "Name"
+          ]
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createPeople",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.createPeople.req.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.createPeople.res.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "MutationDeleteBookingResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "DeleteBookingLambdaDataSource",
+            "Name"
+          ]
+        },
+        "TypeName": "Mutation",
+        "FieldName": "deleteBooking",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.deleteBooking.req.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.deleteBooking.res.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "MutationcreateBookingResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "CreateBookingLambdaDataSource",
+            "Name"
+          ]
+        },
+        "TypeName": "Mutation",
+        "FieldName": "createBooking",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.createBooking.req.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.createBooking.res.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Conditions": {
+    "HasEnvironmentParameter": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "env"
+            },
+            "NONE"
+          ]
+        }
+      ]
+    },
+    "AlwaysFalse": {
+      "Fn::Equals": ["true", "false"]
+    }
+  },
+  "Outputs": {
+    "EmptyOutput": {
+      "Description": "An empty output. You may delete this if you have at least one resource above.",
+      "Value": ""
+    }
+  }
+}

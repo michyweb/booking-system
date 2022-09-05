@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "myapp",
+    "serviceName": "AppSync",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authmyapp28e61c6428e61c64"
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "AWS_IAM"
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "storage": {
+      "People:@model(appsync)": [
+        "create",
+        "read"
+      ],
+      "Booking:@model(appsync)": [
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

@@ -1,0 +1,77 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+
+type People
+  @model(queries: { get: "getPeople", list:"listPeople" }, mutations: null, subscriptions: null)
+  @auth(rules: [
+    { allow: public, operations: [read], provider: iam },
+    { allow: private, operations: [read]},
+    { allow: owner}
+  ]) {
+  id: ID!
+  name: String!
+  number: String
+  drink: String
+  dish: String
+  book: String
+  admin: Boolean
+}
+
+type Booking
+  @model(queries: {  list:"listBooking" }, mutations: null, subscriptions: null)
+  @auth(rules: [
+    { allow: public, operations: [read], provider: iam },
+    { allow: private, operations: [read]},
+    { allow: owner }
+  ]) {
+  id: ID!
+  available_seats_per_table: Int!
+  max_seats: Int!
+}
+
+# {
+#  "id": "8pm",
+#  "available_seats_per_table": 2,
+#  "max_seats": 2,
+#   "createdAt": "2022-08-26T14:20:52.658Z",
+#  "updatedAt": "2022-08-26T14:20:52.658Z"
+# }
+
+
+
+
+
+
+# type Query {
+#   getPeople(msg: String): String
+# }
+
+# type Query {
+#   echo(msg: String): String @function(name: "echofunction-${env}")
+# }
+
+input CreatePeopleInput {
+	id: ID
+	name: String!
+	number: String
+	drink: String
+	dish: String
+	book: String
+}
+
+input CreateBookingInput {
+	id: ID
+	available_seats_per_table: Int!
+  max_seats: Int!
+}
+
+
+type Mutation {
+  createPeople(input: CreatePeopleInput!): String
+  createBooking(input: CreateBookingInput!): String
+  deleteBooking(input: CreateBookingInput!): String
+  # createPeople(msg: String): String
+  # 	createPeople(input: CreatePeopleInput!, condition: ModelPeopleConditionInput): People
+  # createPeople(input: CreatePeopleInput!): People @function(name: "addfunction-${env}")
+  # add(number1: Int, number2: Int): Int @function(name: "addfunction-${env}")
+}

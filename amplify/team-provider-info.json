@@ -1,0 +1,42 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-myapp-dev-134322-authRole",
+      "UnauthRoleArn": "arn:aws:iam::863994147283:role/amplify-myapp-dev-134322-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::863994147283:role/amplify-myapp-dev-134322-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-myapp-dev-134322-deployment",
+      "UnauthRoleName": "amplify-myapp-dev-134322-unauthRole",
+      "StackName": "amplify-myapp-dev-134322",
+      "StackId": "arn:aws:cloudformation:eu-central-1:863994147283:stack/amplify-myapp-dev-134322/3b968b30-2324-11ed-80fa-065a68ddc89e",
+      "AmplifyAppId": "ds5lllb7obs0n"
+    },
+    "categories": {
+      "function": {
+        "createPeople": {
+          "deploymentBucketName": "amplify-myapp-dev-134322-deployment",
+          "s3Key": "amplify-builds/createPeople-596d6369507138374a65-build.zip"
+        },
+        "createBooking": {
+          "deploymentBucketName": "amplify-myapp-dev-134322-deployment",
+          "s3Key": "amplify-builds/createBooking-526d5446594242323467-build.zip"
+        },
+        "deleteBooking": {
+          "deploymentBucketName": "amplify-myapp-dev-134322-deployment",
+          "s3Key": "amplify-builds/deleteBooking-597a655a4c69792b6957-build.zip"
+        }
+      },
+      "auth": {
+        "myapp28e61c6428e61c64": {
+          "facebookAppId": "1353978545129032"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "ds5lllb7obs0n",
+          "type": "manual"
+        }
+      }
+    }
+  }
+}
